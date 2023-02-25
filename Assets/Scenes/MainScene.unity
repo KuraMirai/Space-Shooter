@@ -1249,6 +1249,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8237863598899760970, guid: 13d4b73e325320142af512a0237c7497, type: 3}
   m_PrefabInstance: {fileID: 1147540419}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1189533082 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8683754067432731400, guid: 46f0fc6bbafbbbf408c9ed85e29ed287, type: 3}
+  m_PrefabInstance: {fileID: 3210049353219213831}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1525747924
 GameObject:
   m_ObjectHideFlags: 0
@@ -1402,6 +1407,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3210049353743118246, guid: 46f0fc6bbafbbbf408c9ed85e29ed287, type: 3}
+      propertyPath: shipView
+      value: 
+      objectReference: {fileID: 1189533082}
+    - target: {fileID: 3210049353743118246, guid: 46f0fc6bbafbbbf408c9ed85e29ed287, type: 3}
+      propertyPath: movementJoyStick
+      value: 
+      objectReference: {fileID: 6791795403658239744}
+    - target: {fileID: 3210049353743118246, guid: 46f0fc6bbafbbbf408c9ed85e29ed287, type: 3}
+      propertyPath: shipAssetTransform
+      value: 
+      objectReference: {fileID: 1189533082}
+    - target: {fileID: 3210049353743118246, guid: 46f0fc6bbafbbbf408c9ed85e29ed287, type: 3}
+      propertyPath: useJoystickControls
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3635304891506255172, guid: 46f0fc6bbafbbbf408c9ed85e29ed287, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1409,6 +1430,14 @@ PrefabInstance:
     - target: {fileID: 3635304891506255172, guid: 46f0fc6bbafbbbf408c9ed85e29ed287, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4173183311495722391, guid: 46f0fc6bbafbbbf408c9ed85e29ed287, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338312859334210212, guid: 46f0fc6bbafbbbf408c9ed85e29ed287, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46f0fc6bbafbbbf408c9ed85e29ed287, type: 3}
@@ -1513,3 +1542,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67a94839363ed7b4cbd265b876d5a522, type: 3}
+--- !u!114 &6791795403658239744 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5959987555659890482, guid: 67a94839363ed7b4cbd265b876d5a522, type: 3}
+  m_PrefabInstance: {fileID: 6791795403658239743}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cc6a849c573bb546b77bac14a5a99bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

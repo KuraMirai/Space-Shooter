@@ -15,7 +15,10 @@ namespace Enemy
         [SerializeField] private Healthbar healthBar;
         [SerializeField] private GameObject deathVfx;
         [SerializeField] private GameObject shipView;
+        [SerializeField] private Transform shipAssetTransform;
         [SerializeField] private float movementSpeed;
+        [SerializeField] private float turnSpeed = 5;
+        [SerializeField] private float attackTime = 5;
         [SerializeField] private ShipData shipData;
 
         private float _currentHP;
@@ -91,9 +94,31 @@ namespace Enemy
             rb.velocity = Vector3.zero;
             attackPattern.SetAttackDirection(Vector3.down);
             attackPattern.Attack();
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(attackTime);
             attackPattern.StopAttacking();
             StopMoving();
+        }
+
+
+        private void FixedUpdate()
+        {
+            HandleRotation();
+        }
+
+        private void HandleRotation()
+        {
+            if (rb.velocity.x != 0)
+            {
+                shipAssetTransform.rotation *= Quaternion.Euler(new Vector3(0, -rb.velocity.x, 0) * turnSpeed);
+                Vector3 rot = shipAssetTransform.rotation.eulerAngles;
+                rot.y = rot.y > 180 ? rot.y - 360 : rot.y;
+                rot.y = Mathf.Clamp(rot.y, -45, 45);
+                shipAssetTransform.rotation = Quaternion.Euler(rot);
+            }
+            else
+            {
+                shipAssetTransform.rotation = Quaternion.Slerp(shipAssetTransform.rotation, Quaternion.Euler(0, 0, 0), turnSpeed * Time.deltaTime);
+            }
         }
 
         private void ActivateDeathVfx()      
