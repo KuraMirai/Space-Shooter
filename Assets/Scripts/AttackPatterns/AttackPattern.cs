@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using PoolFactories;
 using UnityEngine;
 
 namespace AttackPatterns
@@ -10,16 +11,16 @@ namespace AttackPatterns
         protected float _bulletSpeed;
         protected bool _isPlayer;
         protected Coroutine _attackRoutine;
-        protected Transform _bulletsParent;
+        protected BulletsPoolFactory _bulletsPoolFactory;
         protected Vector3 _attackDirection;
 
-        public void Init(Transform bulletsParent, float attackInterval, float attackPower, float bulletSpeed, bool isPlayer = false)
+        public void Init(BulletsPoolFactory factory, float attackInterval, float attackPower, float bulletSpeed, bool isPlayer = false)
         {
             _attackInterval = attackInterval;
             _attackPower = attackPower;
             _bulletSpeed = bulletSpeed;
             _isPlayer = isPlayer;
-            _bulletsParent = bulletsParent;
+            _bulletsPoolFactory = factory;
         }
 
         public void SetAttackDirection(Vector3 direction)

@@ -7,7 +7,6 @@ namespace AttackPatterns
 {
     public class FanAPT : AttackPattern
     {
-        [SerializeField] private Bullet bullet;
         [SerializeField] private int bulletCount = 3;
 
         #region Constants
@@ -43,7 +42,7 @@ namespace AttackPatterns
                     float x = _attackDirection.x * Mathf.Cos(addedOffset) - _attackDirection.y * Mathf.Sin(addedOffset);
                     float y = _attackDirection.x * Mathf.Sin(addedOffset) + _attackDirection.y * Mathf.Cos(addedOffset);
                     Vector3 newAttackDirection = new Vector3(-x, -y);
-                    Bullet Flybullet = Instantiate(bullet, transform.position, Quaternion.LookRotation(newAttackDirection, Vector3.up), _bulletsParent.transform);
+                    Bullet Flybullet = _bulletsPoolFactory.Pull(Quaternion.LookRotation(newAttackDirection, Vector3.up), transform.position);
                     Flybullet.Init(newAttackDirection, _bulletSpeed, _attackPower, _isPlayer);
                 }
             }

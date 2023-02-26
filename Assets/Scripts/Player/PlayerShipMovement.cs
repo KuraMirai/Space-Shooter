@@ -54,7 +54,7 @@ namespace Player
         {
             if (horizontal != 0)
             {
-                shipAssetTransform.rotation *= Quaternion.Euler(new Vector3(0, 0, -horizontal) * turnSpeed);
+                shipAssetTransform.rotation *= Quaternion.Euler(new Vector3(0, -horizontal, 0) * turnSpeed);
                 Vector3 rot = shipAssetTransform.rotation.eulerAngles;
                 rot.y = rot.y > 180 ? rot.y - 360 : rot.y;
                 rot.y = Mathf.Clamp(rot.y, -45, 45);
@@ -62,7 +62,7 @@ namespace Player
             }
             else
             {
-                shipAssetTransform.rotation = Quaternion.Slerp(shipAssetTransform.rotation, Quaternion.Euler(-90, 0, 180), turnSpeed * Time.deltaTime);
+                shipAssetTransform.rotation = Quaternion.Slerp(shipAssetTransform.rotation, Quaternion.Euler(0, 0, 0), turnSpeed * Time.deltaTime);
             }
         }
 

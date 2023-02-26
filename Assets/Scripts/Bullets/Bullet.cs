@@ -1,9 +1,12 @@
-﻿using Managers;
+﻿using System;
+using Managers;
+using PoolFactories.Interfaces;
 using UnityEngine;
+using System.Collections;
 
 namespace Bullets
 {
-    public class Bullet : MonoBehaviour
+    public class Bullet : MonoBehaviour, IPullable
     {
         [SerializeField] protected Rigidbody rb;
 
@@ -11,7 +14,9 @@ namespace Bullets
         protected float _damage;
         protected bool _isPlayerBullet;
         protected Vector3 _direction;
+        protected Coroutine _creationRoutine;
 
+        public event Action<Bullet> Pushed; 
 
         public void Init(Vector3 direction, float moveSpeed, float damage, bool isPlayerBullet = false)
         {
@@ -19,6 +24,20 @@ namespace Bullets
             _moveSpeed = moveSpeed;
             _damage = damage;
             _direction = direction;
+            SetActive(true);
+            StartCreationRoutine();
+        }
+
+        public void Push()
+        {
+            Pushed?.Invoke(this);
+            Pushed = null;
+            SetActive(false);
+        }
+
+        private void SetActive(bool active)
+        {
+            gameObject.SetActive(active);
         }
 
         private void Update()
@@ -27,6 +46,30 @@ namespace Bullets
                 rb.velocity = _direction * _moveSpeed;
             else
                 rb.velocity = Vector3.zero;
+        }
+        
+        private void StartCreationRoutine()
+        {
+            if (_creationRoutine == null)
+            {
+                _creationRoutine = StartCoroutine(CreationRoutine());
+            }
+        }
+
+        public void StopCreationRoutine()
+        {
+            if (_creationRoutine != null)
+            {
+                StopCoroutine(_creationRoutine);
+                _creationRoutine = null;
+            }
+        }
+        
+        private IEnumerator CreationRoutine()
+        {
+            yield return new WaitForSeconds(5f);
+            _creationRoutine = null;
+            Push();
         }
     }
 }

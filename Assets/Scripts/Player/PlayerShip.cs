@@ -2,6 +2,7 @@
 using DataModels;
 using Enemy;
 using Managers;
+using PoolFactories;
 using UI;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace Player
     public class PlayerShip : MonoBehaviour
     {
         [SerializeField] private AttackPattern attackPattern;
-        [SerializeField] private Transform bulletsParent;
+        [SerializeField] private BulletsPoolFactory bulletsParent;
         [SerializeField] private Healthbar healthBar;
         [SerializeField] private GameObject deathVfx;
         [SerializeField] private GameObject playerView;

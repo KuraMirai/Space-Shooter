@@ -7,8 +7,6 @@ namespace AttackPatterns
 {
     public class SingleShotAPT : AttackPattern
     {
-        [SerializeField] private Bullet bullet;
-
         private Transform _playerTransform;
 
         public override void Attack()
@@ -28,7 +26,7 @@ namespace AttackPatterns
         {
             if (!PauseManager.IsPause)
             {
-                Bullet Flybullet = Instantiate(bullet, transform.position, Quaternion.LookRotation(_attackDirection, Vector3.up), _bulletsParent.transform);
+                Bullet Flybullet = _bulletsPoolFactory.Pull(Quaternion.LookRotation(_attackDirection, Vector3.up), transform.position);
                 Flybullet.Init(_attackDirection, _bulletSpeed, _attackPower, _isPlayer);
             }
         }

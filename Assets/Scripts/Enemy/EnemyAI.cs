@@ -1,14 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using AttackPatterns;
 using DataModels;
 using Managers;
 using Player;
+using PoolFactories;
+using PoolFactories.Interfaces;
 using UI;
 using UnityEngine;
 
 namespace Enemy
 {
-    public class EnemyAI : MonoBehaviour
+    public class EnemyAI : MonoBehaviour, IPullable
     {
         [SerializeField] private AttackPattern attackPattern;
         [SerializeField] private Rigidbody rb;
@@ -25,6 +28,9 @@ namespace Enemy
         private float _currentAttackSpd;
         private float _currentAttackPower;
         private Coroutine _moveRoutine;
+        
+        public event Action<EnemyAI> Pushed; 
+
 
         #region Constants
         private const float HealthCoeff = 25f;
@@ -39,20 +45,23 @@ namespace Enemy
                 _currentHP = value;
                 if (_currentHP <= 0)
                 {
-                    ActivateDeathVfx();
                     EventManager.SendEvent(Constants.EnemyDied);
                     PlayerScores.AddScore(1);
+                    Push();
                 }
             }
         }
     
-        public void Init(Transform bulletsParent)
+        public void Init(BulletsPoolFactory bulletsPoolFactory)
         {
+            SetActive(true);
             CalculateStats();
-            attackPattern.Init(bulletsParent, shipData.AttackInterval, _currentAttackPower, shipData.BulletSpeed);
+            attackPattern.Init(bulletsPoolFactory, shipData.AttackInterval, _currentAttackPower, shipData.BulletSpeed);
             StartMoving();
+            ActivateVfx(true);
         }
     
+        
         private void CalculateStats()
         {
             _currentHP = shipData.InitialHP + (PlayerScores.ExpansionLevel * HealthCoeff);
@@ -121,15 +130,17 @@ namespace Enemy
             }
         }
 
-        private void ActivateDeathVfx()      
+        private void ActivateVfx(bool activate)      
         {
-            attackPattern.StopAllCoroutines();
-            StopAllCoroutines();
-            shipView.SetActive(false);
-            deathVfx.SetActive(true);
-            Destroy(gameObject, 1.5f);
+            shipView.SetActive(activate);
+            deathVfx.SetActive(!activate);
         }
 
+        private void SetActive(bool active)
+        {
+            gameObject.SetActive(active);
+        }
+        
         public void TakeDamage(float damage)
         {
             CurrentHP -= damage;
@@ -139,6 +150,15 @@ namespace Enemy
         public void Kill()
         {
             CurrentHP = 0;
+        }
+
+        public void Push()
+        {
+            Pushed?.Invoke(this);
+            Pushed = null;
+            ActivateVfx(false);
+            attackPattern.StopAttacking();
+            StopMoving();
         }
     }
 }

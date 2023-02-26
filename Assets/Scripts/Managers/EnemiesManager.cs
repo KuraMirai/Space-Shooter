@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Enemy;
 using Player;
+using PoolFactories;
 using UI.Menus;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -11,9 +12,8 @@ namespace Managers
     public class EnemiesManager : MonoBehaviour
     {
         [SerializeField] private InGameMenu inGameMenu;
-        [SerializeField] private Transform bulletsParent;
-        [SerializeField] private Transform enemiesParent;
-        [SerializeField] private List<EnemyAI> enemiesList;
+        [SerializeField] private BulletsPoolFactory bulletsPoolFactory;
+        [SerializeField] private List<AbstractPoolFactory<EnemyAI>> enemiesFactoriesList;
 
         #region Constants
 
@@ -26,20 +26,19 @@ namespace Managers
         private int _levelDifficulty;
         private int _currentLevelDifficulty;
         private int _enemyKilled;
-        private readonly List<EnemyAI> _spawnedEnemies = new List<EnemyAI>();
 
         private void Awake()
         {
             EventManager.StartListening(Constants.StartGame, StartGame);
             EventManager.StartListening(Constants.NextLevel, StartGame);
             EventManager.StartListening(Constants.EnemyDied, CheckLevelProgress);
-            EventManager.StartListening(Constants.GoHome, DestroyEnemies);
+            EventManager.StartListening(Constants.GoHome, ClearKilledEnemies);
         }
 
         private void StartGame()
         {
             _currentLevelDifficulty = 0;
-            DestroyEnemies();
+            ClearKilledEnemies();
             CalсulateLevelDifficulty();
             StartCoroutine(SpawnEnemies());
         }
@@ -58,25 +57,14 @@ namespace Managers
 
         private void SpawnEnemy()
         {
-            int m = Random.Range(0, enemiesList.Count);
-            EnemyAI enemy = Instantiate(enemiesList[m], CalculateSpawnPosition(), Quaternion.identity, enemiesParent);
-            enemy.Init(bulletsParent);
-            _spawnedEnemies.Add(enemy);
+            int m = Random.Range(0, enemiesFactoriesList.Count);
+            EnemyAI enemy = enemiesFactoriesList[m].Pull(CalculateSpawnPosition());
+            enemy.Init(bulletsPoolFactory);
             _currentLevelDifficulty += 1;
         }
 
-        private void DestroyEnemies()
+        private void ClearKilledEnemies()
         {
-            foreach (var t in _spawnedEnemies)
-            {
-                if (t != null)
-                {
-                    var spawnedEnemy = t;
-                    Destroy(spawnedEnemy.gameObject);
-                }
-            }
-
-            _spawnedEnemies.Clear();
             _enemyKilled = 0;
         }
 
