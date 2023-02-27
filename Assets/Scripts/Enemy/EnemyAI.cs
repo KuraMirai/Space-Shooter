@@ -85,7 +85,6 @@ namespace Enemy
             {
                 StopCoroutine(_moveRoutine);
                 _moveRoutine = null;
-                StartMoving();
             }
         }
 
@@ -106,6 +105,7 @@ namespace Enemy
             yield return new WaitForSeconds(attackTime);
             attackPattern.StopAttacking();
             StopMoving();
+            StartMoving();
         }
 
 
